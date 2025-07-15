@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/admin-dashboard/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/cli/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/installation/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/integration/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/license-format/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/license-server/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://quantummeta.github.io/quantummeta-license/quickstart/</loc>
+         <lastmod>2025-07-15</lastmod>
+    </url>
+</urlset>
