@@ -1,0 +1,86 @@
+site_name: QuantumMeta License Manager
+site_description: Universal, secure licensing system for QuantumMeta ecosystem packages
+site_author: QuantumMeta Team
+site_url: https://quantummeta.github.io/quantummeta-license
+
+repo_name: quantummeta/quantummeta-license
+repo_url: https://github.com/quantummeta/quantummeta-license
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - License Server: license-server.md
+  - Installation: installation.md
+  - Quick Start: quickstart.md
+  - CLI Reference: cli.md
+  - Admin Dashboard: admin-dashboard.md
+  - Integration Guide: integration.md
+  - License Format: license-format.md
+  - API Reference: api.md
+  - Security: security.md
+  - FAQ: faq.md
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            docstring_style: google
+            show_source: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/quantummeta
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/quantummeta-license/
+
+copyright: Copyright &copy; 2025 QuantumMeta Team

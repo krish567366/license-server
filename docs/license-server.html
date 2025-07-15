@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumMeta License Server - Request Your License</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: white;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .license-form {
+            grid-column: span 1;
+        }
+
+        .info-panel {
+            grid-column: span 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            margin-top: 10px;
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-section li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .info-section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .package-card {
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .package-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .package-card.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .package-name {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .package-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e1e5e9;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0;
+            transition: width 0.3s ease;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 QuantumMeta License Server</h1>
+            <p>Secure, encrypted licensing for the future of AI and Quantum Computing</p>
+            <p><em>Get instant access to premium QuantumMeta packages</em></p>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">📖 Documentation</a>
+                <a href="admin-app.html" class="nav-link">🔧 Admin Dashboard</a>
+                <a href="cli.html" class="nav-link">⌨️ CLI Reference</a>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalLicenses">2,847</div>
+                <div class="stat-label">Licenses Issued</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeUsers">1,923</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="supportedPackages">12</div>
+                <div class="stat-label">Supported Packages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- License Request Form -->
+            <div class="card license-form">
+                <h2 style="color: #667eea; margin-bottom: 20px;">🔐 Request Your License</h2>
+                
+                <div id="alertContainer"></div>
+                
+                <form id="licenseForm">
+                    <div class="form-group">
+                        <label for="userEmail">Email Address *</label>
+                        <input type="email" id="userEmail" name="email" required placeholder="your.email@company.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userName">Full Name *</label>
+                        <input type="text" id="userName" name="name" required placeholder="John Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="organization">Organization</label>
+                        <input type="text" id="organization" name="organization" placeholder="Your Company Inc.">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select Packages *</label>
+                        <div class="package-grid">
+                            <div class="package-card" onclick="togglePackage('quantum-metalearn')">
+                                <div class="package-name">quantum-metalearn</div>
+                                <div class="package-desc">Advanced ML algorithms and neural networks</div>
+                            </div>
+                            <div class="package-card" onclick="togglePackage('se-agi')">
+                                <div class="package-name">se-agi</div>
+                                <div class="package-desc">Software Engineering AGI tools</div>
+                            </div>
+                            <div class="package-card" onclick="togglePackage('kyber-pqc')">
+                                <div class="package-name">kyber-pqc</div>
+                                <div class="package-desc">Post-quantum cryptography suite</div>
+                            </div>
+                            <div class="package-card" onclick="togglePackage('neural-quantum')">
+                                <div class="package-name">neural-quantum</div>
+                                <div class="package-desc">Quantum neural network frameworks</div>
+                            </div>
+                            <div class="package-card" onclick="togglePackage('meta-compute')">
+                                <div class="package-name">meta-compute</div>
+                                <div class="package-desc">Distributed computing platform</div>
+                            </div>
+                            <div class="package-card" onclick="togglePackage('quantum-crypto')">
+                                <div class="package-name">quantum-crypto</div>
+                                <div class="package-desc">Quantum cryptographic protocols</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Required Features</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="core" name="features" value="core" checked>
+                                <label for="core">Core Features</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pro" name="features" value="pro">
+                                <label for="pro">Pro Features</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="enterprise" name="features" value="enterprise">
+                                <label for="enterprise">Enterprise</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ai" name="features" value="ai">
+                                <label for="ai">AI Features</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="quantum" name="features" value="quantum">
+                                <label for="quantum">Quantum Computing</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="research" name="features" value="research">
+                                <label for="research">Research License</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="intendedUse">Intended Use</label>
+                        <textarea id="intendedUse" name="intendedUse" rows="3" placeholder="Brief description of how you plan to use these packages..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="machineId">Machine ID (Optional)</label>
+                        <input type="text" id="machineId" name="machineId" placeholder="Leave empty for any machine">
+                        <small style="color: #666;">For hardware-locked licenses. Get your machine ID with: quantum-license info</small>
+                    </div>
+                    
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn" id="submitBtn">
+                        🚀 Request License
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" onclick="generateMachineId()">
+                        🔧 Generate Machine ID
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Information Panel -->
+            <div class="card info-panel">
+                <h2 style="color: #667eea; margin-bottom: 20px;">📋 What You Get</h2>
+                
+                <div class="info-section">
+                    <h3>🔐 Secure License File</h3>
+                    <ul>
+                        <li>AES-256-GCM encrypted .qkey file</li>
+                        <li>Ed25519 digital signature</li>
+                        <li>Hardware locking (optional)</li>
+                        <li>Feature-specific access control</li>
+                    </ul>
+                </div>
+                
+                <div class="info-section">
+                    <h3>⚡ Instant Delivery</h3>
+                    <ul>
+                        <li>Email delivery within minutes</li>
+                        <li>CLI installation instructions</li>
+                        <li>Quick start documentation</li>
+                        <li>Support contact information</li>
+                    </ul>
+                </div>
+                
+                <div class="info-section">
+                    <h3>🎯 Trial Period</h3>
+                    <ul>
+                        <li>7-day grace period</li>
+                        <li>Full feature access</li>
+                        <li>No credit card required</li>
+                        <li>Seamless license activation</li>
+                    </ul>
+                </div>
+                
+                <div class="info-section">
+                    <h3>🛠️ Easy Integration</h3>
+                    <ul>
+                        <li>One-line license validation</li>
+                        <li>Development mode bypass</li>
+                        <li>Cross-platform support</li>
+                        <li>CI/CD friendly</li>
+                    </ul>
+                </div>
+                
+                <div class="info-section">
+                    <h3>🔄 License Management</h3>
+                    <ul>
+                        <li>Admin dashboard access</li>
+                        <li>Usage analytics</li>
+                        <li>License renewal alerts</li>
+                        <li>Multi-machine support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="text-align: center; color: white; margin-top: 40px;">
+            <p><strong>Built with ❤️ for the QuantumMeta ecosystem</strong></p>
+            <p><em>Empowering the future of AI, Quantum Computing, and AGI</em></p>
+        </div>
+    </div>
+
+    <script>
+        let selectedPackages = new Set();
+        let licenseCounter = 2847;
+        let userCounter = 1923;
+
+        // Update counters periodically
+        setInterval(() => {
+            licenseCounter += Math.floor(Math.random() * 3);
+            userCounter += Math.floor(Math.random() * 2);
+            document.getElementById('totalLicenses').textContent = licenseCounter.toLocaleString();
+            document.getElementById('activeUsers').textContent = userCounter.toLocaleString();
+        }, 5000);
+
+        function togglePackage(packageName) {
+            const card = event.currentTarget;
+            
+            if (selectedPackages.has(packageName)) {
+                selectedPackages.delete(packageName);
+                card.classList.remove('selected');
+            } else {
+                selectedPackages.add(packageName);
+                card.classList.add('selected');
+            }
+        }
+
+        function generateMachineId() {
+            // Simulate machine ID generation
+            const chars = 'abcdef0123456789';
+            let machineId = '';
+            for (let i = 0; i < 32; i++) {
+                machineId += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('machineId').value = machineId;
+            showAlert('Machine ID generated! This is a simulated ID for demo purposes.', 'success');
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            alertContainer.firstChild.style.display = 'block';
+            
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        function showProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            progressBar.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 15;
+                if (width >= 100) {
+                    width = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🚀 Request License';
+                        showLicenseGenerated();
+                    }, 500);
+                }
+                progressFill.style.width = width + '%';
+            }, 200);
+        }
+
+        function showLicenseGenerated() {
+            const email = document.getElementById('userEmail').value;
+            const packages = Array.from(selectedPackages).join(', ');
+            
+            showAlert(`
+                🎉 License request submitted successfully!<br>
+                <strong>Email:</strong> ${email}<br>
+                <strong>Packages:</strong> ${packages || 'None selected'}<br>
+                <strong>Status:</strong> Your encrypted .qkey file will be sent to your email within 5 minutes.<br>
+                <strong>Next Steps:</strong> Check your email for the license file and installation instructions.
+            `, 'success');
+            
+            // Simulate email being sent
+            setTimeout(() => {
+                downloadSampleLicense();
+            }, 2000);
+        }
+
+        function downloadSampleLicense() {
+            const email = document.getElementById('userEmail').value;
+            const packages = Array.from(selectedPackages);
+            const features = Array.from(document.querySelectorAll('input[name="features"]:checked')).map(cb => cb.value);
+            
+            if (packages.length === 0) {
+                showAlert('Please select at least one package.', 'error');
+                return;
+            }
+            
+            // Generate sample license content
+            const licenseData = {
+                license_id: `lic_${new Date().getFullYear()}_${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
+                user_email: email,
+                packages: packages,
+                features: features,
+                machine_id: document.getElementById('machineId').value || null,
+                issued_date: new Date().toISOString().split('T')[0],
+                expires_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                license_type: "standard",
+                signature: "demo_signature_" + Math.random().toString(36).substring(7),
+                encryption: "AES-256-GCM",
+                version: "1.0",
+                notes: "This is a demo license file. In production, this would be properly encrypted and signed."
+            };
+            
+            // Download the license file
+            const blob = new Blob([JSON.stringify(licenseData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `quantummeta_license_${packages[0] || 'demo'}.qkey`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showAlert('📁 Sample license file downloaded! In production, this would be sent via encrypted email.', 'success');
+        }
+
+        // Form submission handler
+        document.getElementById('licenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('userEmail').value;
+            const name = document.getElementById('userName').value;
+            
+            if (!email || !name) {
+                showAlert('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            if (selectedPackages.size === 0) {
+                showAlert('Please select at least one package.', 'error');
+                return;
+            }
+            
+            showProgress();
+        });
+
+        // Auto-fill demo data
+        setTimeout(() => {
+            document.getElementById('userEmail').value = 'demo@quantummeta.com';
+            document.getElementById('userName').value = 'Demo User';
+            document.getElementById('organization').value = 'QuantumMeta Research';
+            document.getElementById('intendedUse').value = 'Research and development of quantum machine learning algorithms.';
+            
+            // Auto-select quantum-metalearn
+            const quantumCard = document.querySelector('.package-card');
+            if (quantumCard) {
+                togglePackage('quantum-metalearn');
+                quantumCard.classList.add('selected');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
